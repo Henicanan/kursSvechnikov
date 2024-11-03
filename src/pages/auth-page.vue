@@ -8,6 +8,7 @@ const userStore = useUserStore();
 
 const inputLogin = ref<string>("");
 const inputPassword = ref<string>("");
+const errorLogin = ref<boolean>(false);
 
 const signIn = async () => {
   try {
@@ -16,8 +17,10 @@ const signIn = async () => {
       inputPassword.value
     );
     if (isAuthenticated) {
+      errorLogin.value = false;
       router.push({ path: "/admin-panel" });
     } else {
+      errorLogin.value = true;
       console.log("Ошибка авторизации");
     }
   } catch (err) {
@@ -44,6 +47,9 @@ const signIn = async () => {
           v-model="inputPassword"
           type="password"
         />
+        <span v-if="errorLogin" class="error-message"
+          >Не верный логин или пароль</span
+        >
         <button class="sigin-button" @click="signIn">Вход</button>
       </div>
     </div>
@@ -96,6 +102,11 @@ const signIn = async () => {
   height: 1.5rem;
   font-size: 20px;
   padding-left: 10px;
+}
+
+.error-message {
+  color: rgb(208, 36, 36);
+  padding-top: 10px;
 }
 
 .sigin-button {
